@@ -28,7 +28,7 @@ Ensure you have the following software installed on your machine:
 1. Clone the repository.
 
    ```bash
-   git clone https://github.com/your-username/your-project.git
+   git clone https://github.com/itsmiraz/ts-modules-generator.git
    ```
 
 2. Navigate to the project directory.
