@@ -4,7 +4,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Running the Code Generator](#running-the-code-generator)
-- [Built With](#https://www.typescriptlang.org)
+- [Built With](https://www.typescriptlang.org)
 
 ## Overview
 
