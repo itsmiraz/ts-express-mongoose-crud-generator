@@ -1,9 +1,13 @@
-import * as fs from 'fs';
-import * as path from 'path';
+#!/usr/bin/env node
+
+"use strict";
+
+import * as fs from "fs";
+import * as path from "path";
 
 const generateFile = (filePath: string, template: string): void => {
-  const content = template || ''; // Use the provided template or an empty string
-  fs.writeFileSync(filePath, content, 'utf-8');
+  const content = template || ""; // Use the provided template or an empty string
+  fs.writeFileSync(filePath, content, "utf-8");
   console.log(`File ${filePath} created successfully.`);
 };
 
@@ -12,45 +16,62 @@ const main = (): void => {
   const fileName = process.argv[3];
 
   if (!directoryPath || !fileName) {
-    console.error('Please provide a directory path and a file name.');
+    console.error("Please provide a directory path and a file name.");
     return;
   }
 
-  const utilsDirectory = path.join(directoryPath, 'utils');
-  const catchAsyncFilePath = path.join(utilsDirectory, 'catchAsync.ts');
+  // const utilsDirectory = path.join(directoryPath, "utils");
+  // const catchAsyncFilePath = path.join(utilsDirectory, "catchAsync.ts");
 
-  if (!fs.existsSync(utilsDirectory)) {
-    fs.mkdirSync(utilsDirectory);
-  }
+  // if (!fs.existsSync(utilsDirectory)) {
+  //   fs.mkdirSync(utilsDirectory);
+  // }
 
   // Add catchAsync.ts file
-  if (!fs.existsSync(catchAsyncFilePath)) {
-    const catchAsyncCode =
-      `import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n` +
-      `// HOF\n` +
-      `export const catchAsync = (fn: RequestHandler) => {\n` +
-      `  return (req: Request, res: Response, next: NextFunction) => {\n` +
-      `    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n` +
-      `  };\n` +
-      `};\n`;
+  // if (!fs.existsSync(catchAsyncFilePath)) {
+  //   const catchAsyncCode =
+  //     `import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n` +
+  //     `// HOF\n` +
+  //     `export const catchAsync = (fn: RequestHandler) => {\n` +
+  //     `  return (req: Request, res: Response, next: NextFunction) => {\n` +
+  //     `    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n` +
+  //     `  };\n` +
+  //     `};\n`;
 
-    fs.writeFileSync(catchAsyncFilePath, catchAsyncCode);
-    console.log(`catchAsync.ts created at ${catchAsyncFilePath}`);
-  }
+  //   fs.writeFileSync(catchAsyncFilePath, catchAsyncCode);
+  //   console.log(`catchAsync.ts created at ${catchAsyncFilePath}`);
+  // }
 
-  const extensions = ['interface', 'model', 'route', 'controller', 'service'];
+  const extensions = [
+    "utils",
+    "interface",
+    "model",
+    "route",
+    "controller",
+    "service",
+    "validation",
+  ];
 
-  extensions.forEach((extension) => {
+  extensions.forEach(extension => {
     const fullFilePath = path.join(
       directoryPath,
-      `${fileName}.${extension}.ts`,
+      `${fileName}.${extension}.ts`
     );
 
     // Add your code template for each file type
-    let template = '';
-    if (extension === 'interface') {
+    let template = "";
+    if (extension === "utils") {
+      template =
+        `import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n` +
+        `// HOF\n` +
+        `export const catchAsync = (fn: RequestHandler) => {\n` +
+        `  return (req: Request, res: Response, next: NextFunction) => {\n` +
+        `    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n` +
+        `  };\n` +
+        `};\n`;
+    } else if (extension === "interface") {
       template = `export type T${fileName} = {\n  // Your interface definition here\n}\n`;
-    } else if (extension === 'model') {
+    } else if (extension === "model") {
       template = `import { Schema, model } from 'mongoose';\n`;
       template += `import { T${fileName} } from './${fileName}.interface';\n\n`;
       template += `const ${fileName}Schema = new Schema<T${fileName}>(\n`;
@@ -61,7 +82,7 @@ const main = (): void => {
       template += `    timestamps: true,\n`;
       template += `  },\n);\n\n`;
       template += `export const ${fileName} = model<T${fileName}>('${fileName}', ${fileName}Schema);\n`;
-    } else if (extension === 'route') {
+    } else if (extension === "route") {
       template = `import express from 'express';\n`;
       template += `import { ${fileName}Controllers } from './${fileName}.controller';\n\n`;
       template += `const router = express.Router();\n\n`;
@@ -71,8 +92,8 @@ const main = (): void => {
       template += `router.patch('/:id', ${fileName}Controllers.update${fileName});\n`;
       template += `router.delete('/:id', ${fileName}Controllers.delete${fileName});\n\n`;
       template += `export const ${fileName}Routes = router;\n`;
-    } else if (extension === 'controller') {
-      template = `import { catchAsync } from './utils/catchAsync';\n`;
+    } else if (extension === "controller") {
+      template = `import { catchAsync } from './${fileName}.utils';\n`;
       template += `import { ${fileName}Services } from './${fileName}.service';\n`;
       template += `const create${fileName} = catchAsync(async (req, res) => {\n`;
       template += `  const result = await ${fileName}Services.create${fileName}IntoDB(req.body);\n\n`;
@@ -119,7 +140,7 @@ const main = (): void => {
       template += `  delete${fileName},\n`;
       template += `  update${fileName},\n`;
       template += `};\n`;
-    } else if (extension === 'service') {
+    } else if (extension === "service") {
       template = `import { ${fileName} } from './${fileName}.model';\n`;
       template += `import { T${fileName} } from './${fileName}.interface';\n\n`;
       template += `const create${fileName}IntoDB = async (payload: T${fileName}) => {\n`;

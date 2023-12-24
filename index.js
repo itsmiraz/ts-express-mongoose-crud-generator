@@ -1,45 +1,64 @@
+#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var path = require("path");
 var generateFile = function (filePath, template) {
-    var content = template || ''; // Use the provided template or an empty string
-    fs.writeFileSync(filePath, content, 'utf-8');
+    var content = template || ""; // Use the provided template or an empty string
+    fs.writeFileSync(filePath, content, "utf-8");
     console.log("File ".concat(filePath, " created successfully."));
 };
 var main = function () {
     var directoryPath = process.argv[2];
     var fileName = process.argv[3];
     if (!directoryPath || !fileName) {
-        console.error('Please provide a directory path and a file name.');
+        console.error("Please provide a directory path and a file name.");
         return;
     }
-    var utilsDirectory = path.join(directoryPath, 'utils');
-    var catchAsyncFilePath = path.join(utilsDirectory, 'catchAsync.ts');
-    if (!fs.existsSync(utilsDirectory)) {
-        fs.mkdirSync(utilsDirectory);
-    }
+    // const utilsDirectory = path.join(directoryPath, "utils");
+    // const catchAsyncFilePath = path.join(utilsDirectory, "catchAsync.ts");
+    // if (!fs.existsSync(utilsDirectory)) {
+    //   fs.mkdirSync(utilsDirectory);
+    // }
     // Add catchAsync.ts file
-    if (!fs.existsSync(catchAsyncFilePath)) {
-        var catchAsyncCode = "import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n" +
-            "// HOF\n" +
-            "export const catchAsync = (fn: RequestHandler) => {\n" +
-            "  return (req: Request, res: Response, next: NextFunction) => {\n" +
-            "    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n" +
-            "  };\n" +
-            "};\n";
-        fs.writeFileSync(catchAsyncFilePath, catchAsyncCode);
-        console.log("catchAsync.ts created at ".concat(catchAsyncFilePath));
-    }
-    var extensions = ['interface', 'model', 'route', 'controller', 'service'];
+    // if (!fs.existsSync(catchAsyncFilePath)) {
+    //   const catchAsyncCode =
+    //     `import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n` +
+    //     `// HOF\n` +
+    //     `export const catchAsync = (fn: RequestHandler) => {\n` +
+    //     `  return (req: Request, res: Response, next: NextFunction) => {\n` +
+    //     `    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n` +
+    //     `  };\n` +
+    //     `};\n`;
+    //   fs.writeFileSync(catchAsyncFilePath, catchAsyncCode);
+    //   console.log(`catchAsync.ts created at ${catchAsyncFilePath}`);
+    // }
+    var extensions = [
+        "utils",
+        "interface",
+        "model",
+        "route",
+        "controller",
+        "service",
+    ];
     extensions.forEach(function (extension) {
         var fullFilePath = path.join(directoryPath, "".concat(fileName, ".").concat(extension, ".ts"));
         // Add your code template for each file type
-        var template = '';
-        if (extension === 'interface') {
+        var template = "";
+        if (extension === "utils") {
+            template =
+                "import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n" +
+                    "// HOF\n" +
+                    "export const catchAsync = (fn: RequestHandler) => {\n" +
+                    "  return (req: Request, res: Response, next: NextFunction) => {\n" +
+                    "    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n" +
+                    "  };\n" +
+                    "};\n";
+        }
+        else if (extension === "interface") {
             template = "export type T".concat(fileName, " = {\n  // Your interface definition here\n}\n");
         }
-        else if (extension === 'model') {
+        else if (extension === "model") {
             template = "import { Schema, model } from 'mongoose';\n";
             template += "import { T".concat(fileName, " } from './").concat(fileName, ".interface';\n\n");
             template += "const ".concat(fileName, "Schema = new Schema<T").concat(fileName, ">(\n");
@@ -51,7 +70,7 @@ var main = function () {
             template += "  },\n);\n\n";
             template += "export const ".concat(fileName, " = model<T").concat(fileName, ">('").concat(fileName, "', ").concat(fileName, "Schema);\n");
         }
-        else if (extension === 'route') {
+        else if (extension === "route") {
             template = "import express from 'express';\n";
             template += "import { ".concat(fileName, "Controllers } from './").concat(fileName, ".controller';\n\n");
             template += "const router = express.Router();\n\n";
@@ -62,8 +81,8 @@ var main = function () {
             template += "router.delete('/:id', ".concat(fileName, "Controllers.delete").concat(fileName, ");\n\n");
             template += "export const ".concat(fileName, "Routes = router;\n");
         }
-        else if (extension === 'controller') {
-            template = "import { catchAsync } from './utils/catchAsync';\n";
+        else if (extension === "controller") {
+            template = "import { catchAsync } from './".concat(fileName, ".utils';\n");
             template += "import { ".concat(fileName, "Services } from './").concat(fileName, ".service';\n");
             template += "const create".concat(fileName, " = catchAsync(async (req, res) => {\n");
             template += "  const result = await ".concat(fileName, "Services.create").concat(fileName, "IntoDB(req.body);\n\n");
@@ -111,7 +130,7 @@ var main = function () {
             template += "  update".concat(fileName, ",\n");
             template += "};\n";
         }
-        else if (extension === 'service') {
+        else if (extension === "service") {
             template = "import { ".concat(fileName, " } from './").concat(fileName, ".model';\n");
             template += "import { T".concat(fileName, " } from './").concat(fileName, ".interface';\n\n");
             template += "const create".concat(fileName, "IntoDB = async (payload: T").concat(fileName, ") => {\n");
