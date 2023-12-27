@@ -33,6 +33,8 @@ Ensure you have the following software installed on your machine:
 
 - [Node.js](https://nodejs.org/)
 - [Typescript](https://www.typescriptlang.org/)
+- [Expressjs](https://expressjs.com/)
+- [Mongoosejs](https://mongoosejs.com/)
 
 ### Installation
 
@@ -49,3 +51,16 @@ Ensure you have the following software installed on your machine:
 ```
 
 And here you go a bowler plate with routing , controller, service , utils , model generated.
+
+### Usage Examples
+
+- Provide examples of how users can use your package to generate modules. Include command examples and explanations.
+
+```dotnetcli
+# Example:
+generate-modules ./src/modules/user user
+```
+
+### Contriubutors
+
+- [Miraj Hossen](https://mirajhossen.vercel.app/)
