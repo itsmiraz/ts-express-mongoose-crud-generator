@@ -1,9 +1,10 @@
-# Project Name - TS MODULES GENERATOR BY [Miraj Hossen](https://mirajhossen.vercel.app/)
+# TypeScript Express Mongosse Crud Modules Generator
 
 - [Getting Started](#getting-started)
+
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [Running the Code Generator](#running-the-code-generator)
+
 - [Built With](https://www.typescriptlang.org)
 
 ## Overview
@@ -13,7 +14,6 @@ This Node.js script facilitates the rapid setup of a TypeScript Express project 
 ## Key Features
 
 - **File Generation:** Automatically creates TypeScript files with predefined structures, promoting consistency in project organization.
-- **Utility Function:** Ensures the existence of a `catchAsync.ts` file within the `utils` directory. This file contains a common higher-order function (`catchAsync`) used for error handling in Express.js.
 
 ## Usage
 
@@ -22,8 +22,6 @@ This Node.js script facilitates the rapid setup of a TypeScript Express project 
 2. **Execution:** Run the script to generate project files, adhering to the specified naming conventions.
 
 3. **Consistent Project Layout:** Encourages a standardized project structure for TypeScript-based Express.js applications.
-
-## Table of Contents
 
 ## Getting Started
 
@@ -38,26 +36,16 @@ Ensure you have the following software installed on your machine:
 
 ### Installation
 
-1. Clone the repository.
+1. Command.
 
    ```bash
-   git clone https://github.com/itsmiraz/ts-modules-generator.git
+   npm i ts-express-mongoose-crud-gen
    ```
 
-2. Navigate to the project directory.
-
-Copy the generateFile.ts file into your Express app in root Directory
-
-3. Convert in Javascript.
-
-   ```bash
-   tsc generateFile.ts
-   ```
-
-## Running the Code Generator
-
-Generate files using the following command:
+2. Navigate to the project cli.
 
 ```bash
-node generateFiles /path/to/your/directory yourFileName
+   generate-modules ./path fileName
 ```
+
+And here you go a bowler plate with routing , controller, service , utils , model generated.
