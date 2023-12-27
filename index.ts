@@ -20,27 +20,7 @@ const main = (): void => {
     return;
   }
 
-  // const utilsDirectory = path.join(directoryPath, "utils");
-  // const catchAsyncFilePath = path.join(utilsDirectory, "catchAsync.ts");
-
-  // if (!fs.existsSync(utilsDirectory)) {
-  //   fs.mkdirSync(utilsDirectory);
-  // }
-
-  // Add catchAsync.ts file
-  // if (!fs.existsSync(catchAsyncFilePath)) {
-  //   const catchAsyncCode =
-  //     `import { NextFunction, Request, RequestHandler, Response } from 'express';\n\n` +
-  //     `// HOF\n` +
-  //     `export const catchAsync = (fn: RequestHandler) => {\n` +
-  //     `  return (req: Request, res: Response, next: NextFunction) => {\n` +
-  //     `    Promise.resolve(fn(req, res, next)).catch((err) => next(err));\n` +
-  //     `  };\n` +
-  //     `};\n`;
-
-  //   fs.writeFileSync(catchAsyncFilePath, catchAsyncCode);
-  //   console.log(`catchAsync.ts created at ${catchAsyncFilePath}`);
-  // }
+  
 
   const extensions = [
     "utils",
